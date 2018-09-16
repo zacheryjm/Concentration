@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     }
     @IBAction func NewGame(_ sender: UIButton) {
         emoji.removeAll()
-        GameOver.text = ""
+        GameOver.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         game = Concentration(numberofPairsOfCards: (cardButtons.count + 1) / 2)
         updateViewFromModel()
     }
@@ -48,7 +48,7 @@ class ViewController: UIViewController {
             }
             
             if game.numMatchedPairs == cardButtons.count / 2 {
-                GameOver.text = "Game Over!"
+                GameOver.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
             }
         }
         
