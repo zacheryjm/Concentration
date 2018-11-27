@@ -10,9 +10,12 @@ import Foundation
 
 class Concentration {
     
-    private var cards = [Card]()
-    private var score = 0
-    private var numMatchedPairs = 0
+    var cards = [Card]()
+    var score = 0
+    var numMatchedPairs = 0
+    var gameOver = false
+    
+    static let MAXNUMBEROFMATCHES = 8
     
     func chooseCard(at index: Int) {
         
@@ -50,6 +53,9 @@ class Concentration {
             cards[oneCardFaceUpIndex].isMatched = true
             score += 2
             numMatchedPairs += 1
+            if numMatchedPairs == Concentration.MAXNUMBEROFMATCHES {
+                gameOver = true
+            }
         }
         //chosen cards were not a match. Determine if penalty is necessary.
         else {
