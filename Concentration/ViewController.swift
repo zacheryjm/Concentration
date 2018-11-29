@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         emoji.removeAll()
         GameOver.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         game = Concentration(numberofPairsOfCards: Concentration.MAXNUMBEROFMATCHES)
+        addCardViewsToGrid()
         updateViewFromModel()
     }
     
@@ -31,23 +32,45 @@ class ViewController: UIViewController {
             let location = sender.location(in: cardsInPlayView)
             
             if let tappedView = cardsInPlayView.hitTest(location, with: nil) as? CardView {
-                if let cardIndex = cardsInPlayView.subviews.index(of: tappedView) {
-                    
-                    self.game.chooseCard(at: cardIndex)
 
+                if let cardIndex = cardsInPlayView.subviews.index(of: tappedView) {
+                    game.cards[cardIndex].isFaceUp = !game.cards[cardIndex].isFaceUp
+                        
                     UIView.transition(with: tappedView,
                                       duration: 0.5,
                                       options: [.transitionFlipFromLeft],
                                       animations: {
-                                        tappedView.setNeedsDisplay()
-                                        },
-                                      completion: {finished in
-                                        self.updateViewFromModel()
-                                        })
+                                        tappedView.isFaceUp = self.game.cards[cardIndex].isFaceUp
+                                        tappedView.setNeedsDisplay()},
+                                      completion: { finished in
+                                        
+                                        if self.game.faceUpCardIndexes.contains(cardIndex) {
+                                            self.game.faceUpCardIndexes.removeLast()
+                                        }
+                                        else {
+                                            self.game.faceUpCardIndexes.append(cardIndex)
+                                        }
+                        
+                                        if self.game.faceUpCardIndexes.count == 2 {
+                                            
+                                            if self.checkForMatch() {
+                                                self.animateMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.FIRSTFACEUPCARD])
+                                                self.animateMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.SECONDFACEUPCARD])
+                                                
+                                            }
+                                            else {
+                                                self.animateNotMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.FIRSTFACEUPCARD])
+                                                self.animateNotMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.SECONDFACEUPCARD])
+                                            }
+                                            self.game.removeFaceUpCards()
+                                            self.updateViewFromModel()
+                                        }
+                    })
                 }
             }
         }
     }
+    
     @IBOutlet weak var ScoreLabel: UILabel!
     @IBOutlet weak var GameOver: UILabel!
     
@@ -56,6 +79,35 @@ class ViewController: UIViewController {
 
         return cardViews.filter {$0.isFaceUp}
         
+    }
+    
+    private func animateMatchedCard(forCardIndex : Int) {
+        if let cardView = cardsInPlayView.subviews[forCardIndex] as? CardView {
+            UIView.transition(with: cardView,
+                              duration: 0.5,
+                              options: [.transitionFlipFromTop],
+                              animations: {
+                                cardView.isFaceUp = self.game.cards[forCardIndex].isFaceUp
+                                cardView.isMatched = self.game.cards[forCardIndex].isMatched
+                                cardView.setNeedsDisplay()},
+                              completion: {finished in
+                                cardView.isHidden = true
+            })
+
+        }
+    }
+    
+    private func animateNotMatchedCard(forCardIndex : Int) {
+    
+        if let cardView = cardsInPlayView.subviews[forCardIndex] as? CardView {
+            UIView.transition(with: cardView,
+                              duration: 0.5,
+                              options: [.transitionFlipFromLeft],
+                              animations: {
+                                cardView.isFaceUp = self.game.cards[forCardIndex].isFaceUp
+                                cardView.isMatched = self.game.cards[forCardIndex].isMatched
+                                cardView.setNeedsDisplay()})
+        }
     }
     
     private func updateViewFromModel() {
@@ -70,6 +122,7 @@ class ViewController: UIViewController {
         }
     }
     
+    //TODO: Update function to fix bug that makes the grid not fill entire view
     private func addCardViewsToGrid() {
         grid.frame = cardsInPlayView.bounds
         grid.cellCount = game.cards.count
@@ -82,7 +135,7 @@ class ViewController: UIViewController {
             if let cellFrame = grid[index] {
                 let card = game.cards[index]
                 let cardView = CardView(frame: cellFrame.insetBy(dx: CardSize.inset, dy: CardSize.inset),
-                                        emojiForCard : emoji(for: card), card : card)
+                                        emojiForCard : emoji(for: card))
                 
                 cardsInPlayView.addSubview(cardView)
             } else {
@@ -114,6 +167,47 @@ class ViewController: UIViewController {
             return "?"
         }
 
+    }
+    
+    func checkForMatch() -> Bool {
+        
+        var isMatch = false
+        
+        let firstCardIndex = game.faceUpCardIndexes[game.FIRSTFACEUPCARD]
+        let secondCardIndex = game.faceUpCardIndexes[game.SECONDFACEUPCARD]
+        
+        //Compare two face up cards to see if it is a match. If true, give points.
+        if game.cards[firstCardIndex].identifier == game.cards[secondCardIndex].identifier && firstCardIndex != secondCardIndex {
+            
+            game.cards[firstCardIndex].isMatched = true
+            game.cards[secondCardIndex].isMatched = true
+            
+            game.score += 2
+            game.numMatchedPairs += 1
+            if game.numMatchedPairs == Concentration.MAXNUMBEROFMATCHES {
+                game.gameOver = true
+            }
+            
+            isMatch = true
+            
+        }
+            //chosen cards were not a match. Determine if penalty is necessary.
+        else {
+            if game.cards[firstCardIndex].hasBeenSeen {
+                game.score -= 1
+            }
+            if game.cards[secondCardIndex].hasBeenSeen {
+                game.score -= 1
+            }
+            
+            game.cards[firstCardIndex].hasBeenSeen = true
+            game.cards[secondCardIndex].hasBeenSeen = true
+        }
+        
+        game.cards[firstCardIndex].isFaceUp = false
+        game.cards[secondCardIndex].isFaceUp = false
+        
+        return isMatch
     }
 
 }

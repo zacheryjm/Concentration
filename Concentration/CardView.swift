@@ -12,23 +12,22 @@ class CardView: UIView {
 
     var isFaceUp = false
     var isMatched = false
+    private var emoji : String
+
     
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
         drawBackground()
-        if card.isFaceUp {
+        if self.isFaceUp && !self.isMatched {
             drawEmoji()
         }
     }
- 
 
-    private var emoji : String
-    private var card : Card
     
-    init(frame: CGRect, emojiForCard : String, card : Card) {
+    
+    init(frame: CGRect, emojiForCard : String) {
         self.emoji = emojiForCard
-        self.card = card
         super.init(frame : frame)
     }
     
@@ -60,17 +59,14 @@ class CardView: UIView {
         // draw rectangle with rounded corners
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
         
-        if card.isFaceUp {
+        if self.isFaceUp {
             UIColor.white.setFill()
-            isFaceUp = true
         }
-        else if card.isMatched {
+        else if self.isMatched {
             UIColor.black.setFill()
-            isMatched = true
         }
         else {
             UIColor.blue.setFill()
-            isFaceUp = false
         }
         roundedRect.fill()
         

@@ -11,69 +11,19 @@ import Foundation
 class Concentration {
     
     var cards = [Card]()
+    var faceUpCardIndexes = [Int]()
     var score = 0
     var numMatchedPairs = 0
     var gameOver = false
     
     static let MAXNUMBEROFMATCHES = 8
+    let FIRSTFACEUPCARD = 0
+    let SECONDFACEUPCARD = 1
     
-    func chooseCard(at index: Int) {
-        
-        var numFaceUpCards = 0
-        var oneCardFaceUpIndex = -1
-        
-        for cardIndex in cards.indices{
-            if cards[cardIndex].isFaceUp {
-                numFaceUpCards += 1
-                if numFaceUpCards <= 1 {
-                    oneCardFaceUpIndex = cardIndex
-                }
-                else {
-                    cards[cardIndex].isFaceUp = false
-                    cards[oneCardFaceUpIndex].isFaceUp = false
-                    oneCardFaceUpIndex = -1
-                }
-                
-            }
-        }
-        
-        //Do nothing if the user chooses a matched card or the same card twice
-        if cards[index].isMatched || index == oneCardFaceUpIndex {
-            return
-        }
-        
-        //No cards are face up. Flip this card as users first choice
-        if oneCardFaceUpIndex == -1 {
-            cards[index].isFaceUp = true
-            return
-        }
-        //Compare two face up cards to see if it is a match. If true, give points.
-        if cards[index].identifier == cards[oneCardFaceUpIndex].identifier {
-            cards[index].isMatched = true
-            cards[oneCardFaceUpIndex].isMatched = true
-            score += 2
-            numMatchedPairs += 1
-            if numMatchedPairs == Concentration.MAXNUMBEROFMATCHES {
-                gameOver = true
-            }
-        }
-        //chosen cards were not a match. Determine if penalty is necessary.
-        else {
-            if cards[oneCardFaceUpIndex].hasBeenSeen {
-                score -= 1
-            }
-            if cards[index].hasBeenSeen {
-                score -= 1
-            }
-            
-            cards[oneCardFaceUpIndex].hasBeenSeen = true
-            cards[index].hasBeenSeen = true
-        }
-        
-        cards[index].isFaceUp = true
-        
+    func removeFaceUpCards() {
+        faceUpCardIndexes.removeAll()
     }
-
+    
     init(numberofPairsOfCards : Int) {
         for _ in 0..<numberofPairsOfCards {
             let card = Card()
