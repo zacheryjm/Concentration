@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C008DC8721B49C4E0079EEC1 /* ConcentrationThemeChoiceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C008DC8621B49C4E0079EEC1 /* ConcentrationThemeChoiceTableViewController.swift */; };
 		C03FF2BA219A727D00C9A94E /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03FF2B9219A727D00C9A94E /* Grid.swift */; };
 		C03FF2BC219A742200C9A94E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03FF2BB219A742200C9A94E /* CardView.swift */; };
 		C067A95F213CDD9400DCF58E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067A95E213CDD9400DCF58E /* AppDelegate.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C008DC8621B49C4E0079EEC1 /* ConcentrationThemeChoiceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationThemeChoiceTableViewController.swift; sourceTree = "<group>"; };
 		C03FF2B9219A727D00C9A94E /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		C03FF2BB219A742200C9A94E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		C067A95B213CDD9400DCF58E /* Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Concentration.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				C067A960213CDD9400DCF58E /* ViewController.swift */,
+				C008DC8621B49C4E0079EEC1 /* ConcentrationThemeChoiceTableViewController.swift */,
 				C03FF2B9219A727D00C9A94E /* Grid.swift */,
 				C067A962213CDD9400DCF58E /* Main.storyboard */,
 				C03FF2BB219A742200C9A94E /* CardView.swift */,
@@ -286,6 +289,7 @@
 				C03FF2BA219A727D00C9A94E /* Grid.swift in Sources */,
 				C03FF2BC219A742200C9A94E /* CardView.swift in Sources */,
 				C067A990213FE0E400DCF58E /* Card.swift in Sources */,
+				C008DC8721B49C4E0079EEC1 /* ConcentrationThemeChoiceTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,32 +9,62 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
-        addCardViewsToGrid()
+        super.viewDidLoad()
+        setUpEmojiTheme()
+        
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if !initialLoadComplete {
+            addCardViewsToGrid()
+            initialLoadComplete = true
+        }
         updateViewFromModel()
     }
+    
+    private var initialLoadComplete = false
+
+    @IBOutlet weak var cardsInPlayView: UIView!
+    
     private lazy var game = Concentration(numberofPairsOfCards: Concentration.MAXNUMBEROFMATCHES)
     private lazy var grid = Grid(layout: .aspectRatio(CardSize.aspectRatio),frame: cardsInPlayView.bounds)
 
-    @IBOutlet weak var cardsInPlayView: UIView!
 
     @IBAction func NewGame(_ sender: UIButton) {
         emoji.removeAll()
         GameOver.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         game = Concentration(numberofPairsOfCards: Concentration.MAXNUMBEROFMATCHES)
+        setUpEmojiTheme()
         addCardViewsToGrid()
         updateViewFromModel()
     }
     
     @IBAction func chooseCard(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
+            
+            //Don't allow user to click more than two cards at once
+            if game.faceUpCardIndexes.count == 2 {
+                return
+            }
             let location = sender.location(in: cardsInPlayView)
             
             if let tappedView = cardsInPlayView.hitTest(location, with: nil) as? CardView {
 
                 if let cardIndex = cardsInPlayView.subviews.index(of: tappedView) {
+                    
                     game.cards[cardIndex].isFaceUp = !game.cards[cardIndex].isFaceUp
+                    
+                    //If the card is already faceup, update model to make it facedown.
+                    if self.game.faceUpCardIndexes.contains(cardIndex) {
+                        self.game.faceUpCardIndexes.removeLast()
+                        self.game.cards[cardIndex].hasBeenSeen = true
+                    }
+                    else {
+                        self.game.faceUpCardIndexes.append(cardIndex)
+                    }
                         
                     UIView.transition(with: tappedView,
                                       duration: 0.5,
@@ -44,23 +74,19 @@ class ViewController: UIViewController {
                                         tappedView.setNeedsDisplay()},
                                       completion: { finished in
                                         
-                                        if self.game.faceUpCardIndexes.contains(cardIndex) {
-                                            self.game.faceUpCardIndexes.removeLast()
-                                        }
-                                        else {
-                                            self.game.faceUpCardIndexes.append(cardIndex)
-                                        }
-                        
+                                        //Check for a match if there are two cards faceup
                                         if self.game.faceUpCardIndexes.count == 2 {
                                             
+                                            let firstCardIndex = self.game.faceUpCardIndexes[self.game.FIRSTFACEUPCARD]
+                                            let secondCardIndex = self.game.faceUpCardIndexes[self.game.SECONDFACEUPCARD]
+                                            
                                             if self.checkForMatch() {
-                                                self.animateMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.FIRSTFACEUPCARD])
-                                                self.animateMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.SECONDFACEUPCARD])
-                                                
+                                                self.animateMatchedCard(forCardIndex: firstCardIndex)
+                                                self.animateMatchedCard(forCardIndex: secondCardIndex)
                                             }
                                             else {
-                                                self.animateNotMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.FIRSTFACEUPCARD])
-                                                self.animateNotMatchedCard(forCardIndex: self.game.faceUpCardIndexes[self.game.SECONDFACEUPCARD])
+                                                self.animateNotMatchedCard(forCardIndex: firstCardIndex)
+                                                self.animateNotMatchedCard(forCardIndex: secondCardIndex)
                                             }
                                             self.game.removeFaceUpCards()
                                             self.updateViewFromModel()
@@ -143,30 +169,35 @@ class ViewController: UIViewController {
             }
         }
     }
-    var emojiChoices = [["🐶","🐱","🐭","🐸","🐰","🦊","🐻","🐼"], ["⚽️","🏀","🏈","⚾️","🎾","🏐","🏒","🎱","🏓"],
-                        ["🚛","🚕","🚒","🚌","🏎","🚑","🚓","🚜"],["🍎","🍊","🍋","🍌","🍉","🍇","🍒","🍓"],
-                        ["🐝","🐛","🦋","🐜","🦗","🕷","🐞","🦂"], ["🐙","🦑","🦐","🦀","🐬","🐳","🦈","🐠"]]
-    var chosenEmojiTheme : [String] = []
-    var emoji = Dictionary<Int, String>()
+    
+    var chosenEmojiTheme : [String] = Emoji.emojiThemes[0]
+    var emoji = Dictionary<Int, Int>()
+    
+    func setUpEmojiTheme() {
+        var emojiPosition = [Int]()
+        game = Concentration(numberofPairsOfCards: Concentration.MAXNUMBEROFMATCHES)
+        
+        for index in chosenEmojiTheme.indices {
+            emojiPosition.append(index)
+        }
+        
+        for card in game.cards {
+            if emoji[card.identifier] == nil, emojiPosition.count > 0 {
+                let randomIndex = Int(arc4random_uniform(UInt32(emojiPosition.count)))
+                emoji[card.identifier] = emojiPosition.remove(at: randomIndex)
+            }
+        }
+    }
     
     func emoji(for card: Card) -> String {
-        if emoji.isEmpty {
-            let randomEmojiTheme = Int(arc4random_uniform(UInt32(emojiChoices.count)))
-            chosenEmojiTheme = emojiChoices[randomEmojiTheme]
-        }
-        
-        if emoji[card.identifier] == nil, chosenEmojiTheme.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(chosenEmojiTheme.count)))
-            emoji[card.identifier] = chosenEmojiTheme.remove(at: randomIndex)
-        }
-        
-        if let chosenEmoji = emoji[card.identifier] {
+        if let index = emoji[card.identifier] {
+            let chosenEmoji = chosenEmojiTheme[index]
             return chosenEmoji
         }
         else {
             return "?"
         }
-
+        
     }
     
     func checkForMatch() -> Bool {
@@ -217,5 +248,15 @@ extension ViewController {
         static let aspectRatio: CGFloat = 0.7
         static let borderWidth: CGFloat = 2.0
         static let inset: CGFloat = 4.0
+    }
+}
+
+extension ViewController {
+    struct Emoji {
+        static let emojiThemes = [["🐶","🐱","🐭","🐸","🐰","🦊","🐻","🐼"], ["⚽️","🏀","🏈","⚾️","🎾","🏐","🏒","🎱","🏓"],
+                            ["🚛","🚕","🚒","🚌","🏎","🚑","🚓","🚜"],["🍎","🍊","🍋","🍌","🍉","🍇","🍒","🍓"],
+                            ["🐝","🐛","🦋","🐜","🦗","🕷","🐞","🦂"], ["🐙","🦑","🦐","🦀","🐬","🐳","🦈","🐠"]]
+        static let emojiThemeNames = ["Animals", "Sports", "Vehicles", "Fruits", "Bugs", "Sea Creatures"]
+        
     }
 }
