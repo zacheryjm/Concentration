@@ -107,6 +107,7 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK: Animations for card flip
     private func animateMatchedCard(forCardIndex : Int) {
         if let cardView = cardsInPlayView.subviews[forCardIndex] as? CardView {
             UIView.transition(with: cardView,
@@ -136,6 +137,7 @@ class ViewController: UIViewController {
         }
     }
     
+    //MARK: View modification
     private func updateViewFromModel() {
         
         if game.gameOver {
@@ -148,7 +150,6 @@ class ViewController: UIViewController {
         }
     }
     
-    //TODO: Update function to fix bug that makes the grid not fill entire view
     private func addCardViewsToGrid() {
         grid.frame = cardsInPlayView.bounds
         grid.cellCount = game.cards.count
@@ -170,6 +171,7 @@ class ViewController: UIViewController {
         }
     }
     
+    //MARK: Emoji functions for Card Face
     var chosenEmojiTheme : [String] = Emoji.emojiThemes[0]
     var emoji = Dictionary<Int, Int>()
     
@@ -200,6 +202,8 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK: checkForMatch
+
     func checkForMatch() -> Bool {
         
         var isMatch = false
@@ -242,6 +246,8 @@ class ViewController: UIViewController {
     }
 
 }
+
+//MARK: Extensions
 
 extension ViewController {
     private struct CardSize {

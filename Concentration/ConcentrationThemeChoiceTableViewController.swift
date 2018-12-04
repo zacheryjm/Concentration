@@ -10,6 +10,15 @@ import UIKit
 
 class ConcentrationThemeChoiceTableViewController: UITableViewController {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.backgroundColor = UIColor.black
+
+        let cellNib = UINib(nibName: "ConcentrationTableViewCell", bundle: nil)
+        self.tableView.register(cellNib, forCellReuseIdentifier: "ThemeCell")
+    }
+    
+    
     private var lastSeguedViewController : ViewController?
     // MARK: - Table view data source
 
@@ -25,10 +34,10 @@ class ConcentrationThemeChoiceTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeCell", for: indexPath) as! ConcentrationTableViewCell
 
         let themeName = ViewController.Emoji.emojiThemeNames[indexPath.row]
-        cell.textLabel?.text = themeName
+        cell.ThemeLabel.text = themeName
         cell.textLabel?.textAlignment = .center
         
         return cell

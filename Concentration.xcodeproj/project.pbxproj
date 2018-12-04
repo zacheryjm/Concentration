@@ -20,6 +20,8 @@
 		C067A98E213FE04A00DCF58E /* Concentration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067A98D213FE04A00DCF58E /* Concentration.swift */; };
 		C067A990213FE0E400DCF58E /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067A98F213FE0E400DCF58E /* Card.swift */; };
 		C067A992214D702800DCF58E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C067A991214D702800DCF58E /* README.md */; };
+		C0AFD8C521B5FA1100F8B7EE /* ConcentrationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AFD8C321B5FA1100F8B7EE /* ConcentrationTableViewCell.swift */; };
+		C0AFD8C621B5FA1100F8B7EE /* ConcentrationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0AFD8C421B5FA1100F8B7EE /* ConcentrationTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		C067A98D213FE04A00DCF58E /* Concentration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concentration.swift; sourceTree = "<group>"; };
 		C067A98F213FE0E400DCF58E /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		C067A991214D702800DCF58E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C0AFD8C321B5FA1100F8B7EE /* ConcentrationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationTableViewCell.swift; sourceTree = "<group>"; };
+		C0AFD8C421B5FA1100F8B7EE /* ConcentrationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConcentrationTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,8 @@
 			isa = PBXGroup;
 			children = (
 				C067A960213CDD9400DCF58E /* ViewController.swift */,
+				C0AFD8C321B5FA1100F8B7EE /* ConcentrationTableViewCell.swift */,
+				C0AFD8C421B5FA1100F8B7EE /* ConcentrationTableViewCell.xib */,
 				C008DC8621B49C4E0079EEC1 /* ConcentrationThemeChoiceTableViewController.swift */,
 				C03FF2B9219A727D00C9A94E /* Grid.swift */,
 				C067A962213CDD9400DCF58E /* Main.storyboard */,
@@ -255,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0AFD8C621B5FA1100F8B7EE /* ConcentrationTableViewCell.xib in Resources */,
 				C067A969213CDD9600DCF58E /* LaunchScreen.storyboard in Resources */,
 				C067A966213CDD9600DCF58E /* Assets.xcassets in Resources */,
 				C067A992214D702800DCF58E /* README.md in Resources */,
@@ -285,6 +292,7 @@
 			files = (
 				C067A961213CDD9400DCF58E /* ViewController.swift in Sources */,
 				C067A95F213CDD9400DCF58E /* AppDelegate.swift in Sources */,
+				C0AFD8C521B5FA1100F8B7EE /* ConcentrationTableViewCell.swift in Sources */,
 				C067A98E213FE04A00DCF58E /* Concentration.swift in Sources */,
 				C03FF2BA219A727D00C9A94E /* Grid.swift in Sources */,
 				C03FF2BC219A742200C9A94E /* CardView.swift in Sources */,
