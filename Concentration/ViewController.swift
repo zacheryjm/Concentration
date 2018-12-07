@@ -13,16 +13,34 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpEmojiTheme()
-        
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if !initialLoadComplete {
-            addCardViewsToGrid()
+            initializeCardViewGrid()
             initialLoadComplete = true
         }
         updateViewFromModel()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        var isLandscapeOrientation = false
+        
+        if UIDevice.current.orientation.isLandscape {
+            isLandscapeOrientation = true
+        } else if UIDevice.current.orientation.isPortrait {
+            isLandscapeOrientation = false
+        }
+        coordinator.animate(alongsideTransition: nil, completion: {
+            _ in
+            
+            self.updateCardViewGrid(for: isLandscapeOrientation)
+            self.view.setNeedsLayout()
+            self.view.setNeedsDisplay()
+        })
     }
     
     private var initialLoadComplete = false
@@ -38,7 +56,7 @@ class ViewController: UIViewController {
         GameOver.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         game = Concentration(numberofPairsOfCards: Concentration.MAXNUMBEROFMATCHES)
         setUpEmojiTheme()
-        addCardViewsToGrid()
+        initializeCardViewGrid()
         updateViewFromModel()
     }
     
@@ -150,7 +168,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func addCardViewsToGrid() {
+    private func initializeCardViewGrid() {
         grid.frame = cardsInPlayView.bounds
         grid.cellCount = game.cards.count
         
@@ -169,6 +187,53 @@ class ViewController: UIViewController {
                 print("grid[\(index)] does not exist")
             }
         }
+    }
+    
+    private func updateCardViewGrid(for landscapeOrientation : Bool) {
+        if landscapeOrientation {
+            let ROWCOUNT = 4
+            let COLUMNCOUNT = 4
+            grid = Grid(layout: .dimensions(rowCount: ROWCOUNT, columnCount: COLUMNCOUNT), frame: cardsInPlayView.bounds)
+        }
+        else {
+            grid = Grid(layout: .aspectRatio(CardSize.aspectRatio),frame: cardsInPlayView.bounds)
+
+        }
+        grid.frame = cardsInPlayView.bounds
+        grid.cellCount = game.cards.count
+        
+        for cardView in cardsInPlayView.subviews {
+            cardView.removeFromSuperview()
+        }
+        
+        for index in 0..<grid.cellCount {
+            if let cellFrame = grid[index] {
+                let card = game.cards[index]
+                let cardView = CardView(frame: cellFrame.insetBy(dx: CardSize.inset, dy: CardSize.inset),
+                                        emojiForCard : emoji(for: card))
+                
+                if landscapeOrientation {
+                    cardView.fontSize = 35.0
+                }
+                else {
+                    cardView.fontSize = 50.0
+
+                }
+                
+                if card.isMatched {
+                    cardView.isMatched = true
+                    cardView.isHidden = true
+                }
+                if card.isFaceUp {
+                    cardView.isFaceUp = true
+                }
+                cardsInPlayView.addSubview(cardView)
+            } else {
+                print("grid[\(index)] does not exist")
+            }
+        }
+        
+        
     }
     
     //MARK: Emoji functions for Card Face

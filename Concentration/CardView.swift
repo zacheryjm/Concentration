@@ -13,6 +13,7 @@ class CardView: UIView {
     var isFaceUp = false
     var isMatched = false
     private var emoji : String
+    var fontSize : CGFloat = 50.0
 
     
     // Only override draw() if you perform custom drawing.
@@ -39,7 +40,7 @@ class CardView: UIView {
         
         let label = UILabel()
         label.text = emoji
-        label.font = label.font.withSize(50.0)
+        label.font = label.font.withSize(fontSize)
         label.textAlignment = .center
         label.center = CGPoint(x:self.bounds.size.width / 2.0, y: self.bounds.size.height / 2.0)
         label.drawText(in: bounds)

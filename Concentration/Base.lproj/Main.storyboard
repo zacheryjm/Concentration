@@ -69,7 +69,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hKQ-f4-vS1">
-                                <rect key="frame" x="8" y="144" width="359" height="522"/>
+                                <rect key="frame" x="31" y="144" width="313" height="522"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="Z5S-8U-vDx" appends="YES" id="JZj-ox-DKd"/>
@@ -92,14 +92,14 @@
                             <constraint firstItem="eJn-j5-jq7" firstAttribute="top" secondItem="gPJ-OF-tsX" secondAttribute="bottom" constant="8" symbolic="YES" id="LWb-4k-VeJ"/>
                             <constraint firstItem="eJn-j5-jq7" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gPJ-OF-tsX" secondAttribute="bottom" constant="8" symbolic="YES" id="MXK-j7-giq"/>
                             <constraint firstItem="eJn-j5-jq7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="T4C-Wd-QE6"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hKQ-f4-vS1" secondAttribute="trailing" constant="8" id="WNM-Df-lTk"/>
                             <constraint firstItem="gPJ-OF-tsX" firstAttribute="top" secondItem="hKQ-f4-vS1" secondAttribute="bottom" constant="8" symbolic="YES" id="Wfa-67-LcN"/>
+                            <constraint firstItem="hKQ-f4-vS1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="31" id="Y43-dW-KeK"/>
                             <constraint firstItem="sMQ-vn-JBE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Zzk-M5-4Dx"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sMQ-vn-JBE" secondAttribute="trailing" constant="20" id="cRO-kV-mer"/>
                             <constraint firstItem="sMQ-vn-JBE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ePV-Y0-RyQ"/>
+                            <constraint firstItem="hKQ-f4-vS1" firstAttribute="centerX" secondItem="sMQ-vn-JBE" secondAttribute="centerX" id="giN-dN-oLo"/>
                             <constraint firstItem="gPJ-OF-tsX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="hgs-9e-6GE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eJn-j5-jq7" secondAttribute="trailing" constant="20" id="lar-rm-0Hf"/>
-                            <constraint firstItem="hKQ-f4-vS1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="s4z-Lc-RAe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
